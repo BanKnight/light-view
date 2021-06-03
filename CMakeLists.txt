@@ -8,7 +8,7 @@ project(OpenGLTemplate CXX)
 # desired options on. Open an issue for additional default support.
 # See: https://github.com/Hoshiningen/OpenGL-Template/issues
 
-set(ENABLE_ASSIMP   ON CACHE BOOL "Add Open Asset Import Library (assimp) to the project" FORCE)
+set(ENABLE_ASSIMP   OFF CACHE BOOL "Add Open Asset Import Library (assimp) to the project" FORCE)
 
 #===========================================================================================
 # GLAD CONFIGURATION
@@ -32,7 +32,7 @@ set(GLAD_REPRODUCIBLE   OFF CACHE BOOL "Reproducible build" FORCE)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Set directory paths
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/source)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -46,6 +46,9 @@ LinkGLFW(opengl-template PRIVATE)
 
 include(${CMAKE_DIR}/LinkGLAD.cmake)
 LinkGLAD(opengl-template PRIVATE)
+
+include(${CMAKE_DIR}/LinkQuickjs.cmake)
+LinkQuickjs(opengl-template PRIVATE)
 
 find_package(OpenGL REQUIRED)
 if (OpenGL_FOUND)

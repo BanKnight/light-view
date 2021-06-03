@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.cpp": "cpp",
+        "time.h": "c",
+        "pthread_time.h": "c",
+        "stdatomic.h": "c",
+        "pthread.h": "c",
+        "unistd.h": "c"
+    },
+    "cmake.debugConfig": {
+    "cwd": "${workspaceFolder}"
+    }
+}

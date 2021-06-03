@@ -1,7 +1,10 @@
 #include <iostream>
+#include <string>
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
+
+#include <quickjs-libc.h>
 
 void ProcessInput(GLFWwindow* window)
 {
@@ -9,7 +12,7 @@ void ProcessInput(GLFWwindow* window)
         glfwSetWindowShouldClose(window, true);
 }
 
-int main()
+int main(int argc, char **argv)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -38,6 +41,34 @@ int main()
     {
         glViewport(0, 0, width, height);
     });
+
+
+    JSRuntime *rt;
+    JSContext *ctx;
+    rt = JS_NewRuntime();
+    ctx = JS_NewContextRaw(rt);
+    JS_SetModuleLoaderFunc(rt, NULL, js_module_loader, NULL);
+    JS_AddIntrinsicBaseObjects(ctx);
+    JS_AddIntrinsicDate(ctx);
+    JS_AddIntrinsicEval(ctx);
+    JS_AddIntrinsicStringNormalize(ctx);
+    JS_AddIntrinsicRegExp(ctx);
+    JS_AddIntrinsicJSON(ctx);
+    JS_AddIntrinsicProxy(ctx);
+    JS_AddIntrinsicMapSet(ctx);
+    JS_AddIntrinsicTypedArrays(ctx);
+    JS_AddIntrinsicPromise(ctx);
+    JS_AddIntrinsicBigInt(ctx);
+    
+    js_std_add_helpers(ctx, argc, argv);
+
+    uint8_t *buf;
+    size_t buf_len;
+
+    const char *filename = "./scripts/index.js";
+    buf = js_load_file(ctx, &buf_len, filename);
+
+    JS_Eval(ctx, (const char *)buf, buf_len, filename, JS_EVAL_TYPE_MODULE);
 
     // This is the render loop
     while (!glfwWindowShouldClose(window))
